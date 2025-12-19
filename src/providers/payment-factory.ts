@@ -4,7 +4,7 @@ import { KhaltiPayment } from "./khalti";
 import type { PaymentStrategy } from "./payment-strategy";
 
 export class PaymentFactory {
-  static getProvider(provider: string): PaymentStrategy  {
+  static getProvider(provider: PaymentProvider): PaymentStrategy  {
     switch(provider.toLowerCase()) {
       case PaymentProvider.esewa: 
         return new EsewaPayment();
