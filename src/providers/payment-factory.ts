@@ -1,4 +1,4 @@
-import { PaymentProvider } from "../enums/payment-providers.enum";
+import { PaymentProvider } from "../enums/paymentProviders";
 import { EsewaPayment } from "./esewa";
 import { KhaltiPayment } from "./khalti";
 import type { PaymentStrategy } from "./payment-strategy";
