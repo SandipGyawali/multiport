@@ -1,7 +1,23 @@
 {
   "name": "multiport",
-  "module": "index.ts",
+  "version": "0.1.0",
   "type": "module",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "types": "tsc -p tsconfig.types.json",
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "build:watch": "bun build src/index.ts --outdir dist --target node --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
