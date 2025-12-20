@@ -21,10 +21,16 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
+    "declarationMap": true,
+    "declaration": true,
+    "outDir": "dist",
+    "emitDeclarationOnly": false,
+
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
+  "include": ["src"],
   "exclude": ["docs", "docs/**"]
 }

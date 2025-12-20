@@ -5,5 +5,7 @@
  */
 export enum PaymentProvider {
   esewa = "esewa",
-  khalti = "khalti"
+  esewaTest = "esewaTest",
+  khalti = "khalti",
+  khaltiTest = "khaltiTest"
 }
