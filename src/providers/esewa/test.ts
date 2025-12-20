@@ -1,8 +1,26 @@
-import type { EsewaPaymentStatusCheck } from "../../types";
-import type { PaymentStrategy } from "../payment-strategy";
+import type { 
+  EsewaPaymentRequest, 
+  EsewaPaymentStatusCheck 
+} from "../../types";
+import type { EsewaPaymentStrategy } from "../payment-strategy";
 
-export class EsewaPaymentTest implements PaymentStrategy {
-  async initiatePayment(amount: number): Promise<string> {
+export class EsewaPaymentTest implements EsewaPaymentStrategy {
+  async initiatePayment({ 
+    amount, 
+    failure_url, 
+    product_code, 
+    product_delivery_charge, 
+    product_service_charge, 
+    signature, 
+    signed_field_names, 
+    success_url, 
+    tax_amount, 
+    total_amount, 
+    transaction_uuid
+  }: Partial<EsewaPaymentRequest> = {}): Promise<string> {
+    if(!transaction_uuid) transaction_uuid = crypto.randomUUID();
+
+    console.log(transaction_uuid);
     return `https://esewa.com/pay?txn`
   }
   

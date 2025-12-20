@@ -70,7 +70,7 @@ export interface EsewaPaymentRequest {
    * Comma-separated list of fields included in signature generation.
    * Example: "total_amount,transaction_uuid,product_code"
    */
-  signed_field_names: string;
+  signed_field_names: Array<string>;
 
   /**
    * HMAC-SHA256 signature generated using the secret key
