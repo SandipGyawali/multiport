@@ -50,7 +50,7 @@ export class EsewaPaymentTest implements EsewaPaymentStrategy {
     
     if(!response.ok) {
       const errorText = await response.text();
-      console.error(errorText)
+      console.error(errorText);
       throw new Error(`Http error! status: ${response.status}`);
     }
     
