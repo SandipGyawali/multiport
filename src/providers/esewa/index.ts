@@ -64,4 +64,9 @@ export class Esewa implements EsewaPaymentStrategy {
     
     return data as EsewaPaymentStatusCheck;
   }
+
+
+  async helloWorld() {
+    return true;
+  }
 }

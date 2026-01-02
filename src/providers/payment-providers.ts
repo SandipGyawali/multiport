@@ -1,8 +1,10 @@
 import type { PaymentModeType } from "../constants/payment-mode";
 import { 
-  PAYMENT_PROVIDER, 
+  PAYMENT_PROVIDER,
+  type PaymentProviderType, 
 } from "../constants/payment-provider";
 import { InvalidPaymentProviderError } from "../errors/invalidPaymentProviderError";
+import { ProviderNotFoundError } from "../errors/providerNotFoundError";
 import { Esewa } from "./esewa";
 import { Khalti } from "./khalti";
 
@@ -41,10 +43,21 @@ export class PaymentProvider {
       if(prov.type == "khalti" && !(prov instanceof Khalti)) 
         throw new InvalidPaymentProviderError(`Provider type "khalti" must be an instance of Esewa`);
     });
+    
+    return provider;
   }
 
   constructor({ providers, mode }: PaymentProviderProps) {
     this.providers = providers;
     this.mode = mode;
+  }
+
+  createPayment<P extends keyof ProviderMap>({ provider }: { provider: P }): ProviderMap[P] {
+    const providerInstance = this.providers.find(p => p.type == provider);
+
+    if(!providerInstance) 
+      throw new ProviderNotFoundError(provider);
+
+    return providerInstance as ProviderMap[P];
   }
 }
