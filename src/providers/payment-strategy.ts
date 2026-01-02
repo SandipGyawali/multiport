@@ -1,4 +1,5 @@
-import type { EsewaPaymentRequest, EsewaPaymentStatusCheck } from "../types";
+import type { KhaltiPaymentRequestDTOProps } from "../dtos/khaltiPaymentRequest.dto";
+import type { EsewaPaymentRequest, EsewaPaymentStatusCheck, KhaltiPaymentRequest } from "../types";
 
 
 export interface EsewaPaymentStrategy {
@@ -7,6 +8,11 @@ export interface EsewaPaymentStrategy {
   checkPaymentStatus?(props: Pick<EsewaPaymentStatusCheck, "product_code" | "total_amount" | "transaction_uuid"> )
     : Promise<EsewaPaymentStatusCheck>;
 }
+
+export interface KhaltiPaymentInterface {
+  initiatePayment(payload: KhaltiPaymentRequest): Promise<any>,
+}
+
 
 export interface PaymentStrategy {
   initiatePayment?(input?: Partial<EsewaPaymentRequest>): Promise<string>;

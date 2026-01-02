@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach, mock, spyOn } from "bun:test";
 import { 
   EsewaPaymentStatus, 
-  EsewaPaymentTest ,
+  Esewa,
   type EsewaPaymentStatusCheck, 
 } from "../../src/index";
 
-describe("EsewaPaymentTest", () => {
-  const esewa = new EsewaPaymentTest();  
+describe("EsewaTest", () => {
+  const esewa = new Esewa();  
   
   beforeEach(() => {
     mock.clearAllMocks();
