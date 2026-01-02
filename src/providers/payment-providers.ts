@@ -1,7 +1,8 @@
+import type { PaymentModeType } from "../constants/payment-mode";
 import { 
   PAYMENT_PROVIDER, 
-  type PaymentProviderType 
 } from "../constants/payment-provider";
+import { InvalidPaymentProviderError } from "../errors/invalidPaymentProviderError";
 import { Esewa } from "./esewa";
 import { Khalti } from "./khalti";
 
@@ -11,15 +12,39 @@ type ProviderMap = {
   [PAYMENT_PROVIDER.khalti]: Khalti;
 }
 
+interface PaymentProviderProps {
+  providers: Array<ProviderMap[keyof ProviderMap]>,
+  mode: PaymentModeType
+}
+
+
 export class PaymentProvider {
-  static getProvider<P extends PaymentProviderType>(provider: P): ProviderMap[P]  {
-    switch(provider) {
-      case PAYMENT_PROVIDER.esewa: 
-        return new Esewa() as ProviderMap[P];
-      case PAYMENT_PROVIDER.khalti: 
-        return new Khalti("live_secret_key_68791341fdd94846a146f0457ff7b455") as ProviderMap[P];
-     default: 
-        throw new Error("Unsupported Payment Provider");
-    }
+  private providers: Array<ProviderMap[keyof ProviderMap]>;
+  private mode: PaymentModeType;
+
+  static create({ providers, mode }: PaymentProviderProps) {
+    const provider = new PaymentProvider({ providers, mode });
+    
+    /**
+     * check instances passed in the providers array
+     */
+    provider.providers.forEach((prov, index) => {         
+      if(prov !== null && typeof prov !== "object") 
+        throw new InvalidPaymentProviderError(`Provider at index ${index} is not a valid object`);
+
+      if(!(prov.type in PAYMENT_PROVIDER)) 
+        throw new InvalidPaymentProviderError(`Unsupported provider type: ${prov.type}`);
+
+      if(prov.type == "esewa" && !(prov instanceof Esewa)) 
+        throw new InvalidPaymentProviderError(`Provider type "esewa" must be an instance of Esewa`);
+
+      if(prov.type == "khalti" && !(prov instanceof Khalti)) 
+        throw new InvalidPaymentProviderError(`Provider type "khalti" must be an instance of Esewa`);
+    });
+  }
+
+  constructor({ providers, mode }: PaymentProviderProps) {
+    this.providers = providers;
+    this.mode = mode;
   }
 }

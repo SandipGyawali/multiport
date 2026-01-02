@@ -1,13 +1,22 @@
-import { KhaltiPaymentRequestDTO, type KhaltiPaymentRequestDTOProps } from "../../dtos/khaltiPaymentRequest.dto";
+import type { PaymentModeType } from "../../constants/payment-mode";
+import type { PaymentProviderType } from "../../constants/payment-provider";
+import { KhaltiPaymentRequestDTO } from "../../dtos/khaltiPaymentRequest.dto";
 import type { KhaltiPaymentRequest } from "../../types";
-import type { KhaltiPaymentInterface, PaymentStrategy } from "../payment-strategy";
+import type { KhaltiPaymentInterface } from "../payment-strategy";
 
 export class Khalti implements KhaltiPaymentInterface {
-  private BASE_URL = "https://dev.khalti.com/api"; 
+  private BASE_URLS = {
+    test: "https://rc.esewa.com.np",
+    production: "https://epay.esewa.com.np"
+  } as const;
+  private BASE_URL: string;
   private secretKey: string;
+  public type: PaymentProviderType;
 
-  constructor(secretKey: string) {
+  constructor(secretKey: string, mode: PaymentModeType = "test") {
     this.secretKey = secretKey;
+    this.BASE_URL = this.BASE_URLS[mode];
+    this.type = "khalti";
   }
 
   async initiatePayment(payload: KhaltiPaymentRequest): Promise<any> {
