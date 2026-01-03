@@ -2,6 +2,7 @@
 export const PAYMENT_PROVIDER = {
   esewa: "esewa",
   khalti: "khalti",
+  fonepay: "fonepay"
 } as const;
 
 export type PaymentProviderType =

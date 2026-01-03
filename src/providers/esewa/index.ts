@@ -1,5 +1,5 @@
 import type { PaymentModeType } from "../../constants/payment-mode";
-import type { PaymentProviderType } from "../../constants/payment-provider";
+import { PAYMENT_PROVIDER } from "../../constants/payment-provider";
 import { EsewaPaymentRequestDTO } from "../../dtos/esewaPaymentRequestDto";
 import type { 
   EsewaPaymentRequest, 
@@ -14,7 +14,7 @@ export class Esewa implements EsewaPaymentStrategy {
     production: "https://epay.esewa.com.np"
   } as const;
   private BASE_URL: string;
-  public type: PaymentProviderType;
+  public readonly type = PAYMENT_PROVIDER.esewa;
 
   constructor(mode: PaymentModeType = "test") {
     this.BASE_URL = this.BASE_URLS[mode];

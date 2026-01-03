@@ -1,7 +1,6 @@
 import type { PaymentModeType } from "../constants/payment-mode";
 import { 
   PAYMENT_PROVIDER,
-  type PaymentProviderType, 
 } from "../constants/payment-provider";
 import { InvalidPaymentProviderError } from "../errors/invalidPaymentProviderError";
 import { ProviderNotFoundError } from "../errors/providerNotFoundError";
@@ -14,17 +13,23 @@ type ProviderMap = {
   [PAYMENT_PROVIDER.khalti]: Khalti;
 }
 
-interface PaymentProviderProps {
-  providers: Array<ProviderMap[keyof ProviderMap]>,
-  mode: PaymentModeType
-}
+type AnyProvider = ProviderMap[keyof ProviderMap];
+
+// extract type field from provider instance
+type ProviderType<P extends readonly AnyProvider[]> = P[number]["type"]
+
+// map provider `type` -> concrete class
+type ProviderInstance<
+  P extends readonly AnyProvider[],
+  T extends ProviderType<P>
+> = Extract<P[number], { type: T }>
 
 
-export class PaymentProvider {
-  private providers: Array<ProviderMap[keyof ProviderMap]>;
+export class PaymentProvider<P extends readonly AnyProvider[]> {
+  private providers: P;
   private mode: PaymentModeType;
 
-  static create({ providers, mode }: PaymentProviderProps) {
+  static create<P extends readonly AnyProvider[]>({ providers, mode }: { providers: P; mode: PaymentModeType }) {
     const provider = new PaymentProvider({ providers, mode });
     
     /**
@@ -47,17 +52,22 @@ export class PaymentProvider {
     return provider;
   }
 
-  constructor({ providers, mode }: PaymentProviderProps) {
+  constructor({ providers, mode }: { providers: P; mode: PaymentModeType }) {
     this.providers = providers;
     this.mode = mode;
   }
 
-  createPayment<P extends keyof ProviderMap>({ provider }: { provider: P }): ProviderMap[P] {
-    const providerInstance = this.providers.find(p => p.type == provider);
+  createPayment<T extends ProviderType<P>>(
+    { provider }: 
+    { provider: T }
+  ): ProviderInstance<P, T> {
+    const providerInstance = this.providers.find(
+      (p) => p.type === provider
+    );
 
-    if(!providerInstance) 
+    if (!providerInstance)
       throw new ProviderNotFoundError(provider);
 
-    return providerInstance as ProviderMap[P];
+    return providerInstance as ProviderInstance<P, T>;
   }
 }

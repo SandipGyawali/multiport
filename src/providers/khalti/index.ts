@@ -1,5 +1,5 @@
 import type { PaymentModeType } from "../../constants/payment-mode";
-import type { PaymentProviderType } from "../../constants/payment-provider";
+import { PAYMENT_PROVIDER } from "../../constants/payment-provider";
 import { KhaltiPaymentRequestDTO } from "../../dtos/khaltiPaymentRequest.dto";
 import type { KhaltiPaymentRequest } from "../../types";
 import type { KhaltiPaymentInterface } from "../payment-strategy";
@@ -11,7 +11,7 @@ export class Khalti implements KhaltiPaymentInterface {
   } as const;
   private BASE_URL: string;
   private secretKey: string;
-  public type: PaymentProviderType;
+  public type = PAYMENT_PROVIDER.khalti;
 
   constructor(secretKey: string, mode: PaymentModeType = "test") {
     this.secretKey = secretKey;
